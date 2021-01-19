@@ -2,22 +2,11 @@ import numpy as np
 np.set_printoptions(precision=4, suppress=True)
 
 
-k = 1500
-u0 = 640
-v0 = 512
-
-K = np.array([[k, 0, u0],
-              [0, k, v0],
-              [0, 0, 1]])
-
-K_inv = np.array([[1/k, 0, -u0/k],
-                  [0, 1/k, -v0/k],
-                  [0, 0, 1]])
-
 def rotx(angle):
     return np.array([[1, 0, 0],
                      [0, np.cos(angle), -np.sin(angle)],
                      [0, np.sin(angle), np.cos(angle)]])
+
 
 def task_a():
     r = np.array([[0.1, 0.2, 0.5],
@@ -25,11 +14,9 @@ def task_a():
                   [0.1, 0.2, 1]])
 
     s = np.zeros((3,3))
+    p = np.zeros((3,3))
     for i in range(len(r)):
         s[i] = r[i] / r[i, 2]
-    
-    p = np.zeros((3,3))
-    for i in range(len(s)):
         p[i] = K @ s[i]
     
     for i in range(len(s)):
@@ -37,7 +24,6 @@ def task_a():
     for i in range(len(p)):
         print('p{}: '.format(i+1), p[i])
 
-    
     
 def task_b():
     p = np.array([[0, 0, 1],
@@ -73,6 +59,18 @@ def task_c():
     
     
 if __name__ == '__main__':
-    # task_a()   # Finished
-    # task_b()   # Finished
-    # task_c()   # Have answers, unsure if correct
+    k = 1500
+    u0 = 640
+    v0 = 512
+
+    K = np.array([[k, 0, u0],
+                [0, k, v0],
+                [0, 0, 1]])
+
+    K_inv = np.array([[1/k, 0, -u0/k],
+                    [0, 1/k, -v0/k],
+                    [0, 0, 1]])
+    
+    # task_a()      # Uncomment the task you want to run
+    # task_b()
+    task_c()

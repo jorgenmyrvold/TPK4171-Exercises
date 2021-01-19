@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import *
 np.set_printoptions(precision=4, suppress=True)
 
 
@@ -32,9 +31,3 @@ def hough_transform():
 
 if __name__ == "__main__":
     hough_transform()
-    
-    '''
-    Ser fra plottet at linjene 1-4 krysser i samme punkt, når theta=pi og rho=0.
-    
-    Løsningen blir linjen y=0 som er merket i som turkis stiplet linje i plottet
-    '''

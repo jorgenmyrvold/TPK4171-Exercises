@@ -64,6 +64,6 @@ if __name__ == "__main__":
         print('s{}: '.format(i+1), s[i])
     
     task_c(rc, s)
-        
+
     
     

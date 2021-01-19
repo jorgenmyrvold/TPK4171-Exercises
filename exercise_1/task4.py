@@ -1,12 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 np.set_printoptions(precision=8, suppress=True)
-# np.set_printoptions(formatter={'float': '{: 0.2f}'.format})
 
-
-A = np.array([[0, 1, 2, 3, 5, 5.5],
-              [1, 2, 3.1, 4.1, 5.5, 6.4],
-              [1, 1, 1, 1, 1, 1]]).T
 
 def sdv_homogenous_line(A):
     '''
@@ -92,6 +87,10 @@ def task_c(delta=0.1):
 
 
 if __name__ == "__main__":
+    A = np.array([[0, 1, 2, 3, 5, 5.5],
+                  [1, 2, 3.1, 4.1, 5.5, 6.4],
+                  [1, 1, 1, 1, 1, 1]]).T
+    
     # task_a()
     # task_b()
     task_c()
