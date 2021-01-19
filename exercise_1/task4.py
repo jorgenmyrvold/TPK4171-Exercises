@@ -73,7 +73,25 @@ def task_b(delta=0.1):
     plt.grid(ls='--')
     plt.show()
 
+def task_c(delta=0.1):
+    line_all = sdv_homogenous_line(A)
+    x = np.linspace(0, 6, 100)
+    y_all = -1/line_all[1] * (line_all[0] * x + line_all[2])
+    
+    inliers, outliers = find_inliers_outliers(line_all, A, delta)
+    line_innliers = sdv_homogenous_line(inliers)
+    y_inliers = -1/line_innliers[1] * (line_innliers[0] * x + line_innliers[2])
+    
+    plt.scatter(inliers[:,0], inliers[:,1], label='inliers', color='C2')
+    plt.scatter(outliers[:,0], outliers[:,1], label='outliers', color='C3', marker='X')
+    plt.plot(x, y_all, label='Regression - All points', color='C0')
+    plt.plot(x, y_inliers, label='Regression - Inliers', color='C1')
+    plt.legend()
+    plt.grid(ls='--')
+    plt.show()
+
 
 if __name__ == "__main__":
     # task_a()
-    task_b()
+    # task_b()
+    task_c()
