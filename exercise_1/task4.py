@@ -1,24 +1,12 @@
 import numpy as np
+import matplotlib.pyplot as plt
+np.set_printoptions(precision=8, suppress=True)
+# np.set_printoptions(formatter={'float': '{: 0.2f}'.format})
 
-def rotx(angle):
-    return np.array([[1, 0, 0],
-                     [0, np.cos(angle), -np.sin(angle)],
-                     [0, np.sin(angle), np.cos(angle)]])
-    
-def roty(angle):
-    return np.array([[np.cos(angle), 0, np.sin(angle)],
-                     [0, 1, 0],
-                     [-np.sin(angle), 0, np.cos(angle)]])
-    
-def rotz(angle):
-    return np.array([[np.cos(angle), -np.sin(angle), 0],
-                     [np.sin(angle), np.cos(angle), 0],
-                     [0, 0, 1]])
-    
-def scew(M):
-    return np.array([[0, -M[2], M[1]],
-                     [M[2], 0, -M[0]],
-                     [-M[1], M[0], 0]])
+
+A = np.array([[0, 1, 2, 3, 5, 5.5],
+              [1, 2, 3.1, 4.1, 5.5, 6.4],
+              [1, 1, 1, 1, 1, 1]]).T
 
 def sdv_homogenous_line(A):
     '''
@@ -33,11 +21,9 @@ def sdv_homogenous_line(A):
     u, s, vt = np.linalg.svd(A)
     return vt[-1, :]
 
-
 def find_inliers_outliers(line, homogenous_points, delta):
     '''
-    Takes a matrix of homogenous points and a homogenous line and returns the inliers and outliers.
-    Used to implement a RANSAC algorithm
+    Takes a matrix of homogenous points and a homogenous line and returns the inliers and outliers
     param:
         homogenous_points: matrix on the form A = [[x1, x2, ..., xn],
                                                    [y1, y2, ..., yn],
@@ -58,3 +44,36 @@ def find_inliers_outliers(line, homogenous_points, delta):
             outliers = np.block([[outliers], [A[i]]])
     
     return inliers[1:], outliers[1:]
+
+def task_a():    
+    u, s, vt = np.linalg.svd(A)
+    line = vt[-1, :]
+    
+    x = np.linspace(0, 6, 100)
+    y = -1/line[1] * (line[0] * x + line[2])
+    
+    plt.scatter(A[:,0], A[:,1], label='Data points', color='C0')
+    plt.plot(x, y, label='Regression', color='C1')
+    plt.legend()
+    plt.grid(ls='--')
+    plt.show()
+
+
+def task_b(delta=0.1):
+    line = sdv_homogenous_line(A[:2])
+    x = np.linspace(0, 6, 100)
+    y = -1/line[1] * (line[0] * x + line[2])
+    
+    inliers, outliers = find_inliers_outliers(line, A, delta)
+
+    plt.scatter(inliers[:,0], inliers[:,1], label='inliers', color='C2')
+    plt.scatter(outliers[:,0], outliers[:,1], label='outliers', color='C1', marker='X')
+    plt.plot(x, y, label='Regression', color='C0')
+    plt.legend()
+    plt.grid(ls='--')
+    plt.show()
+
+
+if __name__ == "__main__":
+    # task_a()
+    task_b()
