@@ -10,7 +10,7 @@ def hough_transform():
     theta = np.linspace(0, 2*np.pi, 100)
     
     for i in range(len(x)):
-        plt.plot(theta, x[i]*np.sin(theta) + y[i]*np.cos(theta), label='i={}'.format(i))
+        plt.plot(theta, x[i]*np.sin(theta) + y[i]*np.cos(theta), label='i={}'.format(i+1))
     
     # From the figure we find that the intersection is where
     theta_intersect = np.pi
@@ -20,7 +20,7 @@ def hough_transform():
     y_reg = np.zeros(100)
     
     x_reg = np.linspace(0, 6.5, 100)
-    plt.plot(x_reg, y_reg, label='Regression', color='c', linestyle='-.q')
+    plt.plot(x_reg, y_reg, label='Regression', color='c', linestyle='-.')
     
     plt.scatter(x,y)
     plt.xlabel(r'$\theta$')
@@ -32,3 +32,9 @@ def hough_transform():
 
 if __name__ == "__main__":
     hough_transform()
+    
+    '''
+    Ser fra plottet at linjene 1-4 krysser i samme punkt, når theta=pi og rho=0.
+    
+    Løsningen blir linjen y=0 som er merket i som turkis stiplet linje i plottet
+    '''
