@@ -14,6 +14,10 @@ def rotz(angle):
     return np.array([[np.cos(angle), -np.sin(angle), 0],
                      [np.sin(angle), np.cos(angle), 0],
                      [0, 0, 1]])
+
+def rot2D(angle):
+    return np.array([[np.cos(angle), -np.sin(angle)],
+                     [np.sin(angle), np.cos(angle)]])
     
 def scew(M):
     return np.array([[0, -M[2], M[1]],
