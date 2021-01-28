@@ -29,9 +29,9 @@ def task_a():
     lines = np.zeros((4, 3))
     for i in range(len(lines)):
         lines[i] = line_through_2points(x[i], x[(i+1)%4])
-    
-    y1 = intersect_lines(lines[0], lines[2])
-    y2 = intersect_lines(lines[1], lines[3])
+
+    y1 = np.cross(lines[0], lines[2]) # Find intersection
+    y2 = np.cross(lines[1], lines[3])
     
     print(lines)
     print('y1:', y1, '\ny2:', y2)
@@ -56,13 +56,13 @@ def task_c(s):
     return lines_h
 
 def task_d(lines_h):
-    z1 = intersect_lines(lines_h[0], lines_h[2])
-    z2 = intersect_lines(lines_h[1], lines_h[3])
+    z1 = np.cross(lines_h[0], lines_h[2])  # Find intersection
+    z2 = np.cross(lines_h[1], lines_h[3])
     print('\nz1:', z1, '\nz2:', z2)
     return z1, z2
 
 def task_e(z1, z2):
-    print('\nlambda_z:', np.cross(z1, z2))
+    print('\nlambda_z:', np.cross(z1, z2))  # Find line through z1 and z2
     
     
 
