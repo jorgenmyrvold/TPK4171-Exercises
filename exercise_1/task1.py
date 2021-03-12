@@ -64,12 +64,12 @@ if __name__ == '__main__':
     v0 = 512
 
     K = np.array([[k, 0, u0],
-                [0, k, v0],
-                [0, 0, 1]])
+                  [0, k, v0],
+                  [0, 0, 1]])
 
     K_inv = np.array([[1/k, 0, -u0/k],
-                    [0, 1/k, -v0/k],
-                    [0, 0, 1]])
+                      [0, 1/k, -v0/k],
+                      [0, 0, 1]])
     
     # task_a()      # Uncomment the task you want to run
     # task_b()

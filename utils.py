@@ -19,10 +19,18 @@ def rot2D(angle):
     return np.array([[np.cos(angle), -np.sin(angle)],
                      [np.sin(angle), np.cos(angle)]])
     
-def scew(M):
+def skew(M):
     return np.array([[0, -M[2], M[1]],
                      [M[2], 0, -M[0]],
                      [-M[1], M[0], 0]])
+    
+def pixl2img(p, K):
+    s = np.zeros(p.shape())
+    k_inv = np.linalg.inv(K)
+    for i in range(len(p)):
+        # p[i] = K @ s[i]
+        s[i] = k_inv @ s[i]
+    return s
 
 def sdv_homogenous_line(A):
     '''
@@ -55,10 +63,10 @@ def find_inliers_outliers(line, homogenous_points, delta):
     inliers = np.array(np.zeros(3))
     outliers = np.array(np.zeros(3))
 
-    for i in range(len(A)):
-        if ((line @ A[i]) / np.linalg.norm(line[:2])) <= delta:
-            inliers = np.block([[inliers], [A[i]]])
+    for i in range(len(homogenous_points)):
+        if ((line @ homogenous_points[i]) / np.linalg.norm(line[:2])) <= delta:
+            inliers = np.block([[inliers], [homogenous_points[i]]])
         else:
-            outliers = np.block([[outliers], [A[i]]])
+            outliers = np.block([[outliers], [homogenous_points[i]]])
     
     return inliers[1:], outliers[1:]
