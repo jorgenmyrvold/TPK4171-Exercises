@@ -28,9 +28,20 @@ def pixl2img(p, K):
     s = np.zeros(p.shape())
     k_inv = np.linalg.inv(K)
     for i in range(len(p)):
-        # p[i] = K @ s[i]
-        s[i] = k_inv @ s[i]
+        s[i] = k_inv @ p[i]
     return s
+
+def img2pixl(s, K):
+    p = np.zeros(s.shape())
+    for i in range(len(p)):
+        p[i] = K @ s[i]
+    return p
+
+
+def print_image_and_pixel_coordinates(x, K):
+    s = (1/x[2])*x
+    p = K@s
+    print("s:", s,"\np:", p)
 
 def sdv_homogenous_line(A):
     '''
@@ -42,7 +53,7 @@ def sdv_homogenous_line(A):
     returns:
         line, on the form line=[a, b, c] which corresponds to ax+by+c=0
     '''
-    u, s, vt = np.linalg.svd(A)
+    _, _, vt = np.linalg.svd(A)
     return vt[-1, :]
 
 
@@ -70,3 +81,16 @@ def find_inliers_outliers(line, homogenous_points, delta):
             outliers = np.block([[outliers], [homogenous_points[i]]])
     
     return inliers[1:], outliers[1:]
+
+
+if __name__ == "__main__":
+    k = 1500
+    u0 = 640
+    v0 = 512
+
+    K = np.array([[k, 0, u0],
+                  [0, k, v0],
+                  [0, 0, 1]])
+    
+    x1 = np.array([0.1,0.2,0.5])
+    print_image_and_pixel_coordinates(x1, K)

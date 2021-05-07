@@ -23,12 +23,11 @@ def task_b(): # Converts rc into normalizes imgage coordinates, s
         s[i] = 1/rc[i, 2] * rc[i]
     return s
 
-def task_c(rc, s):
-    plt.scatter(rc[:,0], rc[:,1], label='rc')
+def task_c(ro, s):
+    plt.scatter(ro[:,0], ro[:,1], label='rc')
     plt.scatter(s[:,0], s[:,1], label='s')
     plt.xlim([-1.1,1.1])
     plt.ylim([-1.1,1.1])
-    # plt.gca().invert_yaxis()
     plt.legend()
     plt.show()
     

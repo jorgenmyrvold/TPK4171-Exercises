@@ -141,9 +141,3 @@ print('\n optimality = ', res_1.optimality)
 print('\n Hopt = \n {} \n\n H = \n {}\n\n Ha = \n {}     \n\n d_DLT = {} \n d_opt = {}'
     .format(Hopt/2, H, Ha/2, d_DLT, d_opt))
 
-
-# In[ ]:
-
-
-
-

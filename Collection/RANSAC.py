@@ -43,7 +43,6 @@ def find_inliers_outliers(line, homogenous_points, delta):
 def task_a():    
     u, s, vt = np.linalg.svd(A)
     line = vt[-1, :]
-    print("Least square fit:", line)
     
     x = np.linspace(0, 6, 100)
     y = -1/line[1] * (line[0] * x + line[2])
