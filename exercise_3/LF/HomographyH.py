@@ -32,26 +32,31 @@ H = np.array([[1, 0, 0],
               [0, 1, 0], 
               [0.2, 0.2, 0.8]])
 xp = H @ x
-print(xp)
 xp = xp/xp[2,:]
-print(xp)
 
 nx = x.shape[1]
-xn = x; xn[0:2] += random.normal(0, 0.1, (2,nx))
-xpn = xp; xpn[0:2] += random.normal(0, 0.1, (2,nx))
+xn = x
+xn[0:2] += random.normal(0, 0.1, (2,nx))
+xpn = xp
+xpn[0:2] += random.normal(0, 0.1, (2,nx))
 
 zzz = np.zeros((nx,3))
 A = np.block([[xn.T, zzz, -xn.T*xpn[0].reshape(nx,1)], 
-              [zzz, xn.T, -xn.T*xpn[1].reshape(nx,1)] ])
-print("--------\n", A)
+              [zzz, xn.T, -xn.T*xpn[1].reshape(nx,1)]])
 ua, sa, vat = np.linalg.svd(A)
+print(len(vat))
+print(vat)
 ha = vat[8]/vat[8,8]*0.8
 Ha = np.block([[ha[0:3]], [ha[3:6]], [ha[6:9]]]) 
 
 # Reprojection error
-xh = xn; xph = Ha @ xn; xph = xph/ xph[2]
-xt = xn - xh; xpt = xpn - xph
-xt = xt[0:2].T.flatten(); xpt = xpt[0:2].T.flatten()
+xh = xn
+xph = Ha @ xn
+xph = xph/ xph[2]
+xt = xn - xh
+xpt = xpn - xph
+xt = xt[0:2].T.flatten()
+xpt = xpt[0:2].T.flatten()
 r = np.block([xt, xpt])
 dg = np.inner(r,r)
 

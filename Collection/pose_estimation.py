@@ -16,7 +16,6 @@ def skew(v):
     return np.array([[0, -v[2], v[1]],
                     [v[2], 0, -v[0]],
                     [-v[1], v[0], 0]])
-    
 
 def ro2rc(ro_h, Toc): # Task 1a: Transform ro to rc
     rc_h = np.zeros(ro_h.shape)
@@ -33,7 +32,6 @@ def rc2s(rc): # Task 1b: Transform rc to normalized image coordinates s
         
     print("\n--------- Problem 1b ---------\ns = \n{}".format(s))
     return s
-
     
 def pose_estimation(ro, s):
     A1 = np.hstack([ro[0][0]*skew(s[0]), ro[0][1]*skew(s[0]), skew(s[0])]);
@@ -54,9 +52,9 @@ def pose_estimation(ro, s):
     H = np.block([[r1.reshape((3,1)), r2.reshape((3,1)), r3.reshape((3,1)), t.reshape((3,1))],
                   [0,0,0,1]])
 
+    print ('Estimated pose:')
     print("\n--------- Problem 1c ---------\nEstimated pose:\nH = \n{}".format(H))
     return H
-
     
 if __name__ == '__main__':
     PI = np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,0]])
@@ -73,7 +71,7 @@ if __name__ == '__main__':
     ro_h = np.block([ro, np.ones((len(ro),1))])  # Create homogenous coordinates
     
     print("\nro = \n{}".format(ro))
-    rc = ro2rc(ro_h, Toc)    
+    rc= ro2rc(ro_h, Toc)    
     s = rc2s(rc)
     
     # Task c: new s
@@ -91,8 +89,8 @@ if __name__ == '__main__':
         new_s[i] = PI @ H @ ro_h[i]
         new_s[i] = new_s[i]/new_s[i,2]
     new_s = new_s[:,:-1]
-    print('\n{}'.format(s))
-    print(new_s)
+    print('\n{}'.format(s.flatten()))
+    print(new_s.flatten())
     
     
     

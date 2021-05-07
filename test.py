@@ -1,45 +1,40 @@
 import numpy as np
-np.set_printoptions(formatter={'float': '{: 0.4f}'.format})
+np.set_printoptions(formatter={'float': '{: 0.0f}'.format})
 
 
-import numpy as np
-def skewm(r):
-    return np.array([[0, -r[2], r[1]], [r[2], 0, -r[0]], [-r[1], r[0], 0]])
+# Input: Points
+x = np.array([[0, 0, 1],
+              [0.1, 0, 1],
+              [0.1, 0.1, 1],
+              [0, 0.1, 1],
+              [0.2, -0.1, 1],
+              [0.15, 0.1, 1],
+              [-0.1, 0.3, 1],
+              [-0.2, 0.1, 1],
+              [-0.2, 0, 1]]).T
 
-# r[0] = np.array([0,0,0])
-# r[1] = np.array([1,0,0])
-# r[2] = np.array([1,1,0])
-# r[3] = np.array([0,1,0])
+xp = np.array([[960, 540, 1],
+                  [1320, 540, 1],
+                  [1320, 900, 1],
+                  [960, 900, 1],
+                  [1680, 180, 1],
+                  [1500, 900, 1],
+                  [600, 1620, 1],
+                  [240, 900, 1],
+                  [240, 540, 1]]).T
 
-r = np.array([[0,0,0],
-                   [1,0,0],
-                   [1,1,0],
-                   [0,1,0]])
+nx = x.shape[1]
+xn = x
+xpn = xp
 
-# s[0] = np.array([0,0,1])
-# s[1] = np.array([0.5, 0, 1])
-# s[2] = np.array([0.34, -0.116, 1])
-# s[3] = np.array([0, -0.116, 1])
+zzz = np.zeros((nx,3))
+A = np.block([[xn.T, zzz, -xn.T*xpn[0].reshape(nx,1)], 
+              [zzz, xn.T, -xn.T*xpn[1].reshape(nx,1)]])
+_, _, v = np.linalg.svd(A)
+h = v[-1]/v[-1,-1]
+H = np.block([[h[0:3]], [h[3:6]], [h[6:9]]]) 
 
-s = np.array([[0,0,1],
-                  [0.5, 0, 1],
-                  [0.34, -0.116, 1],
-                  [0, -0.116, 1]])
-
-A1 = np.hstack([r[0][0]*skewm(s[0]), r[0][1]*skewm(s[0]), skewm(s[0])]);
-A2 = np.hstack([r[1][0]*skewm(s[1]), r[1][1]*skewm(s[1]), skewm(s[1])]);
-A3 = np.hstack([r[2][0]*skewm(s[2]), r[2][1]*skewm(s[2]), skewm(s[2])]);
-A4 = np.hstack([r[3][0]*skewm(s[3]), r[3][1]*skewm(s[3]), skewm(s[3])]);
-A = np.vstack((A1, A2, A3, A4))
-u,s,v = np.linalg.svd(A)
-h = v[8]
-scale = np.sign(h[8])*np.linalg.norm(h[0:3])
-r1 = h[0:3]/scale
-r2 = h[3:6]/scale
-r3 = np.cross(r1,r2)
-t = h[6:9]/scale
-H = np.identity(4)
-H[0:3,0] = r1; H[0:3,1] = r2; H[0:3,2] = r3; H[0:3,3] = t # Result: Homography
-
-print ('Estimated pose:')
 print(H)
+new_xp = H @ x
+print(xp)
+print(new_xp)

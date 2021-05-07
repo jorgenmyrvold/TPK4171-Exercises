@@ -1,5 +1,8 @@
 import numpy as np
 
+
+PI = np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,0]])
+
 def rotx(angle):
     return np.array([[1, 0, 0],
                      [0, np.cos(angle), -np.sin(angle)],
@@ -19,10 +22,10 @@ def rot2D(angle):
     return np.array([[np.cos(angle), -np.sin(angle)],
                      [np.sin(angle), np.cos(angle)]])
     
-def skew(M):
-    return np.array([[0, -M[2], M[1]],
-                     [M[2], 0, -M[0]],
-                     [-M[1], M[0], 0]])
+def skew(v):
+    return np.array([[0, -v[2], v[1]],
+                     [v[2], 0, -v[0]],
+                     [-v[1], v[0], 0]])
     
 def pixl2img(p, K):
     s = np.zeros(p.shape())
@@ -42,6 +45,13 @@ def print_image_and_pixel_coordinates(x, K):
     s = (1/x[2])*x
     p = K@s
     print("s:", s,"\np:", p)
+    
+def matrix_eq(m1, m2, margin=0.0001):
+    for i in range(len(m1)):
+        for j in range(len(m1[i])):
+            if m1[i,j] != m2[i,j]:
+                return False
+    return True
 
 def sdv_homogenous_line(A):
     '''
@@ -81,6 +91,7 @@ def find_inliers_outliers(line, homogenous_points, delta):
             outliers = np.block([[outliers], [homogenous_points[i]]])
     
     return inliers[1:], outliers[1:]
+
 
 
 if __name__ == "__main__":
