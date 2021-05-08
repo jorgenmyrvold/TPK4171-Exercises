@@ -32,11 +32,11 @@ def find_inliers_outliers(line, homogenous_points, delta):
     inliers = np.array(np.zeros(3))
     outliers = np.array(np.zeros(3))
 
-    for i in range(len(A)):
-        if ((line @ A[i]) / np.linalg.norm(line[:2])) <= delta:
-            inliers = np.block([[inliers], [A[i]]])
+    for i in range(len(homogenous_points)):
+        if ((line @ homogenous_points[i]) / np.linalg.norm(line[:2])) <= delta:
+            inliers = np.block([[inliers], [homogenous_points[i]]])
         else:
-            outliers = np.block([[outliers], [A[i]]])
+            outliers = np.block([[outliers], [homogenous_points[i]]])
     
     return inliers[1:], outliers[1:]
 
@@ -47,11 +47,11 @@ def task_a():
     x = np.linspace(0, 6, 100)
     y = -1/line[1] * (line[0] * x + line[2])
     
+    plt.figure(1)
     plt.scatter(A[:,0], A[:,1], label='Data points', color='C0')
     plt.plot(x, y, label='Regression', color='C1')
     plt.legend()
     plt.grid(ls='--')
-    plt.show()
 
 
 def task_b(delta=0.1):
@@ -61,12 +61,12 @@ def task_b(delta=0.1):
     
     inliers, outliers = find_inliers_outliers(line, A, delta)
 
+    plt.figure(2)
     plt.scatter(inliers[:,0], inliers[:,1], label='inliers', color='C2')
     plt.scatter(outliers[:,0], outliers[:,1], label='outliers', color='C1', marker='X')
     plt.plot(x, y, label='Regression', color='C0')
     plt.legend()
     plt.grid(ls='--')
-    plt.show()
 
 def task_c(delta=0.1):
     line_all = sdv_homogenous_line(A)
@@ -77,13 +77,13 @@ def task_c(delta=0.1):
     line_innliers = sdv_homogenous_line(inliers)
     y_inliers = -1/line_innliers[1] * (line_innliers[0] * x + line_innliers[2])
     
+    plt.figure(3)
     plt.scatter(inliers[:,0], inliers[:,1], label='inliers', color='C2')
     plt.scatter(outliers[:,0], outliers[:,1], label='outliers', color='C3', marker='X')
     plt.plot(x, y_all, label='Regression - All points', color='C0')
     plt.plot(x, y_inliers, label='Regression - Inliers', color='C1')
     plt.legend()
     plt.grid(ls='--')
-    plt.show()
 
 
 if __name__ == "__main__":
@@ -94,3 +94,5 @@ if __name__ == "__main__":
     task_a()
     task_b()
     task_c()
+    
+    plt.show()

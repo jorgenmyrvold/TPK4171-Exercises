@@ -2,7 +2,6 @@ import numpy as np
 np.set_printoptions(formatter={'float': '{: 0.0f}'.format})
 
 
-# Input: Points
 x = np.array([[0, 0, 1],
               [0.1, 0, 1],
               [0.1, 0.1, 1],

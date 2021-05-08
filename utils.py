@@ -23,9 +23,15 @@ def rot2D(angle):
                      [np.sin(angle), np.cos(angle)]])
     
 def skew(v):
+    v = v.flat
     return np.array([[0, -v[2], v[1]],
                      [v[2], 0, -v[0]],
                      [-v[1], v[0], 0]])
+    
+def expso3(u):
+    S = skew(u)
+    un = np.linalg.norm(u)
+    return np.eye(3) + np.sinc(un/np.pi)*S + 0.5*(np.sinc(un/(2*np.pi)))**2 * S@S
     
 def pixl2img(p, K):
     s = np.zeros(p.shape())
@@ -49,9 +55,17 @@ def print_image_and_pixel_coordinates(x, K):
 def matrix_eq(m1, m2, margin=0.0001):
     for i in range(len(m1)):
         for j in range(len(m1[i])):
-            if m1[i,j] != m2[i,j]:
+            if m1[i,j] < m2[i,j] - margin or m1[i,j] > m2[i,j] + margin:
                 return False
     return True
+
+def matrix_max_diff(m1, m2):  # Naive estimation of precision
+    max_diff = 0              # returns the largest element-wise diff
+    for i in range(len(m1)):
+        for j in range(len(m1[i])):
+            if abs(m1[i,j] - m2[i,j]) > max_diff:
+                max_diff = abs(m1[i,j] - m2[i,j])
+    return max_diff
 
 def sdv_homogenous_line(A):
     '''
