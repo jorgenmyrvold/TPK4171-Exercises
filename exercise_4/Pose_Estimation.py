@@ -13,8 +13,7 @@ x2 = np.array([0.1, 0, 0, 1])
 x3 = np.array([0.1, 0.1, 0, 1])
 x4 = np.array([0, 0.1, 0, 1])
 
-Rco = expso3(np.pi/4*np.array([0,1,0])) @ expso3(120/180*
-                                            np.pi*np.array([1,0,0]))
+Rco = expso3(np.pi/4*np.array([0,1,0])) @ expso3(120/180*np.pi*np.array([1,0,0]))
 ococ = np.array([0.1, 0, 0.5]) 
 Tco = np.eye(4)
 Tco[0:3,0:3] = Rco
