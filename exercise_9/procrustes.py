@@ -32,5 +32,4 @@ if __name__ == '__main__':
     a = Rz@b + n
     R = procrustes_book(a, b)
     print(R)
-    print(np.linalg.det(R))
     

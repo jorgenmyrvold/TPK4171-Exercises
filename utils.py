@@ -3,6 +3,24 @@ import numpy as np
 
 PI = np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,0]])
 
+def rot(angle, axis):
+    if axis.lower() == 'x':
+        return np.array([[1, 0, 0],
+                         [0, np.cos(angle), -np.sin(angle)],
+                         [0, np.sin(angle), np.cos(angle)]])
+    elif axis.lower() == 'y':
+        return np.array([[np.cos(angle), 0, np.sin(angle)],
+                         [0, 1, 0],
+                         [-np.sin(angle), 0, np.cos(angle)]])
+    elif axis.lower() == 'z':
+        return np.array([[np.cos(angle), -np.sin(angle), 0],
+                         [np.sin(angle), np.cos(angle), 0],
+                         [0, 0, 1]])
+    else:
+        print('INVALID INPUT ROTATION AXIS')
+        return np.eye(3)
+        
+
 def rotx(angle):
     return np.array([[1, 0, 0],
                      [0, np.cos(angle), -np.sin(angle)],
@@ -67,10 +85,15 @@ def matrix_max_diff(m1, m2):  # Naive estimation of precision
                 max_diff = abs(m1[i,j] - m2[i,j])
     return max_diff
 
+def matrix_mse(m1, m2): # returns the mean-square error between two matrices
+    mse = (np.square(m1 - m2)).mean()
+    return mse
+
+
 def sdv_homogenous_line(A):
     '''
     Takes a matrix A on the form A=[[x1, y1, 1], ..., [xn, yn,1]] and returns a line on homogenous form
-    param:
+    @param:
         A = [[x1, x2, ..., xn],
              [y1, y2, ..., yn],
              [1,   1, ..., 1 ]].T

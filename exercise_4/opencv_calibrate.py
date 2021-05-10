@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def calibrate(path = 'calibration_img/*.JPG', rows = 6, columns = 9, size = 0.0213):
+def calibrate(path='calibration_img/*.JPG', rows = 6, columns = 9, size = 0.0213):
     
     criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
     

@@ -1,18 +1,19 @@
 import numpy as np
 
+
 def skewm(r):
 	# The skewm symmetric form of a vector
 	S = np.array([[0, -r[2], r[1]], [r[2], 0, -r[0]], [-r[1], r[0], 0]])
 	return S
 
 def expso3(u):
-    R = np.identity(3) + np.sinc(np.linalg.norm(u)/np.pi)*skewm(u)\
-        + 0.5*(np.sinc(np.linalg.norm(u)/(2*np.pi)))**2 * skewm(u) @ skewm(u)
+    R = np.identity(3) + np.sinc(np.linalg.norm(u)/np.pi)*skewm(u) + 0.5*(np.sinc(np.linalg.norm(u)/(2*np.pi)))**2 * skewm(u) @ skewm(u)
     return R
 
 def Rt2T(R,t):
     T = np.identity(4)
-    T[0:3,0:3] = R; T[0:3,3] = t
+    T[0:3,0:3] = R
+    T[0:3,3] = t
     return T
 
 def rc2H(x,xp):
@@ -23,14 +24,13 @@ def rc2H(x,xp):
     A4 = np.hstack([x[0,3]*skewm(xp[:,3]), x[1,3]*skewm(xp[:,3]), skewm(xp[:,3])])
     A = np.vstack((A1, A2, A3, A4))
     # Singlar value decomposition
-    U,S,V = np.linalg.svd(A);
+    _, _, V = np.linalg.svd(A);
     # Nullspace solution
     scale = np.sign(V[8,8])*np.linalg.norm(V[8,0:3])
-    h1 = V[8,0:3]/scale
-    h2 = V[8,3:6]/scale
-    h3 = V[8,6:9]/scale
-    H = np.zeros((3,3))
-    H[:,0] = h1; H[:,1] = h2; H[:,2] = h3
+    h1 = V[8,0:3].reshape(3,1)
+    h2 = V[8,3:6].reshape(3,1)
+    h3 = V[8,6:9].reshape(3,1)
+    H = np.block([h1, h2, h3])/scale
     return H
 
 def Hom2B(H1, H2, H3):
@@ -43,7 +43,7 @@ def Hom2B(H1, H2, H3):
     # A7 = [0 1 0 0 0 0]'; % B(1,2) = B(2,1) = 0;
     # A8 = [1 0 -1 0 0 0]'; % B(1,1) = B(2,2);
     A = np.vstack((A1, A2, A3, A4, A5, A6))
-    U,Sigma,Vt = np.linalg.svd(A)
+    _, _,Vt = np.linalg.svd(A)
     V = Vt.T
     B = np.zeros((3,3))
     B[0,0] = V[0,5];
@@ -109,6 +109,7 @@ if __name__ == '__main__':
     # Camera parameter matrix
     K = np.array([[750, 0, 640], [0, 750, 512], [0, 0, 1]]) 
     ex = np.array([1, 0, 0]); ey = np.array([0, 1, 0]); ez = np.array([0, 0, 1]) 
+    
     # Plane 1
     Rco = np.identity(3)
     ococ = np.array([0, 0, 0.5]) 
@@ -129,13 +130,16 @@ if __name__ == '__main__':
     H1 = rc2H(r,c1)
     H2 = rc2H(r,c2)
     H3 = rc2H(r,c3)
+    
     # Calculate B = inv(K*K')
-    B = Hom2B(H1, H2, H3);
+    B = Hom2B(H1, H2, H3)
+    
     # Solve B = Kinv'*Kinv where K is upper diagonal
-    K = np.linalg.inv(np.linalg.cholesky(B));
+    K = np.linalg.inv(np.linalg.cholesky(B))
+    
     # Normalize
     K = K.transpose()/K[2,2]
 
     np.set_printoptions(formatter={'float': '{: 0.2f}'.format})
-    print ('Estiamted kamera parameter matrix:')
-    print (K)
+    print('Estiamted kamera parameter matrix:')
+    print(K)

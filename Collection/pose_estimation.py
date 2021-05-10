@@ -79,7 +79,7 @@ if __name__ == '__main__':
                   [0.5, 0, 1],
                   [0.34, -0.116, 1],
                   [0, -0.116, 1]])
-    H = pose_estimation(ro_h, s)
+    H = pose_estimation(ro_h, s) # With pixelcoordinates and calibrated camera s = np.linalg.inv(K) @ p
     
     
     # Check that new_s calculated with the Homographie

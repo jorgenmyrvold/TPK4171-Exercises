@@ -33,20 +33,20 @@ x = np.array([[0, 0, 1],
               [-1, 3, 1]])
 
 xp = np.array([[637, 509, 1],
-                  [639, 251, 1],
-                  [641, 108, 1],
-                  [638, 21, 1],
-                  [951, 361, 1],
-                  [331, 358, 1],
-                  [119, 252, 1],
-                  [240, 110, 1],
-                  [314, 25, 1]])
+                [639, 251, 1],
+                [641, 108, 1],
+                [638, 21, 1],
+                [951, 361, 1],
+                [331, 358, 1],
+                [119, 252, 1],
+                [240, 110, 1],
+                [314, 25, 1]])
 
 # Pick out 4 linearly independent points used to calculate the homography
 xp_indep = np.block([[xp[0]],
-               [xp[1]],
-               [xp[4]],
-               [xp[5]]])
+                    [xp[1]],
+                    [xp[4]],
+                    [xp[5]]])
 
 x_indep = np.block([[x[0]], [x[1]], [x[4]], [x[5]]])
 
@@ -98,10 +98,10 @@ xp = np.array([[637, 509, 1],
                 [240, 110, 1],
                 [314, 25, 1]])
 
-xp_H = np.block([[x_pix[0]],
-               [x_pix[1]],
-               [x_pix[4]],
-               [x_pix[5]]])
+xp_H = np.block([[xp[0]],
+               [xp[1]],
+               [xp[4]],
+               [xp[5]]])
 
 x_H = np.block([[x[0]], [x[1]], [x[4]], [x[5]]])
 
@@ -121,10 +121,10 @@ def residual_transfer_error(hh):
 p = xp[0:2]
 
 # Optimization of transfer error with DLT solution as initial value
-xp = np.block([[x_pix[0]],
-               [x_pix[1]],
-               [x_pix[4]],
-               [x_pix[5]]])
+# xp = np.block([[x_pix[0]],
+#                [x_pix[1]],
+#                [x_pix[4]],
+#                [x_pix[5]]])
 
 H0 = H
 h0 = H0.flatten()

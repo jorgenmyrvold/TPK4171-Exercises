@@ -1,8 +1,27 @@
 import numpy as np
 np.set_printoptions(formatter={'float': '{: 0.0f}'.format})
 
+def matrix_eq(m1, m2, margin=0.0001):
+    for i in range(len(m1)):
+        for j in range(len(m1[i])):
+            if m1[i,j] < m2[i,j] - margin or m1[i,j] > m2[i,j] + margin:
+                return False
+    return True
+
+def matrix_max_diff(m1, m2):  # Naive estimation of precision
+    max_diff = 0              # returns the largest element-wise diff
+    for i in range(len(m1)):
+        for j in range(len(m1[i])):
+            if abs(m1[i,j] - m2[i,j]) > max_diff:
+                max_diff = abs(m1[i,j] - m2[i,j])
+    return max_diff
+
+def matrix_mse(m1, m2): # returns the mean-square error between two matrices
+    mse = (np.square(m1 - m2)).mean()
+    return mse
+
 # https://stackoverflow.com/questions/18925181/procrustes-analysis-with-numpy
-def procrustes(X, Y, scaling=False, reflection=False): # Rotation and translation
+def procrustes(X, Y, scaling=False, reflection='best'): # Rotation and translation
     """
     A port of MATLAB's `procrustes` function to Numpy.
 
@@ -108,19 +127,36 @@ def procrustes(X, Y, scaling=False, reflection=False): # Rotation and translatio
         T = T[:my,:]
     c = muX - b*np.dot(muY, T)
     
+    # Notify if reflection
+    if np.linalg.det(T) < 0:
+        print('Reflection')
+    
     #transformation values 
     tform = {'rotation':T, 'scale':b, 'translation':c}
    
     return d, Z, tform
 
 
-# From book - Pure rotation
-def procrustes_book(A, B): # Such that A = R @ B
+#From book - pure rotation
+def procrustes_book(A, B, allow_reflect=False):
+    '''
+    Returns the optimal orthogonal or special orthogonal matrix R such that A = R @ B
+    param:
+        A: Measured coordinates
+        B: World frame coordinates
+        allow_reflect: If false it returns R in SO(3) if false it might ret
+    Algorithm from book ch. 
+    '''
     H = B @ A.T
-    U, _, Vt = np.linalg.svd(H)
-    R = Vt.T @ np.diag([1,1,np.linalg.det( Vt.T @ U.T)]) @ U.T
-    return R
+    u, _, v = np.linalg.svd(H)
+    R = v.T @ np.diag([1,1,np.linalg.det(v.T @ u.T)]) @ u.T
 
+    if allow_reflect:
+        Rr = v.T @ u.T
+        if matrix_mse(A, Rr@B) < matrix_mse(A, R@B):
+            print('Reflection matrix')
+            return Rr
+    return R
 
 
 

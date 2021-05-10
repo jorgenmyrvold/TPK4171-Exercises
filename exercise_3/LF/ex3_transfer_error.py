@@ -2,12 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import least_squares
 
-def skewm(r):
+def skew(r):
 	return np.array([[0,-r[2],r[1]], [r[2],0,-r[0]], [-r[1],r[0],0]])
 def expso3(u):
-    S = skewm(u); un = np.linalg.norm(u)
-    return np.identity(3) + np.sinc(un/np.pi)*S \
-                        + 0.5*(np.sinc(un/(2*np.pi)))**2 * S@S 
+    S = skew(u)
+    un = np.linalg.norm(u)
+    return np.identity(3) + np.sinc(un/np.pi)*S + 0.5*(np.sinc(un/(2*np.pi)))**2 * S@S 
+
+def rotx(angle):
+    return np.array([[1, 0, 0],
+                     [0, np.cos(angle), -np.sin(angle)],
+                     [0, np.sin(angle), np.cos(angle)]])
 
 def residual_transfer_error(hh):
     Hh = hh.reshape(3,3)
@@ -16,11 +21,13 @@ def residual_transfer_error(hh):
     residual = p - ph
     return residual.flatten()
                         
-K = np.array([[1500, 0, 640], [0, 1500, 512], [0, 0, 1]])
-ex = np.array([1,0,0]); ez = np.array([0,0,1])
-t = np.array([0,0,2]).reshape(3,1)
-R = expso3(120/180*np.pi*ex)
-T = np.block([[R, t], [0,0,0,1]])
+K = np.array([[1500, 0, 640], 
+              [0, 1500, 512], 
+              [0, 0, 1]])
+t = np.array([[0,0,2]]).T
+R = rotx(np.deg2rad(120))
+T = np.block([[R, t], 
+              [0,0,0,1]])
 Ha = K @ np.block([R[:,0:2], t])
 
 # Points in object frame                        
@@ -53,7 +60,7 @@ r0 = residual_transfer_error(h0); d_DLT = np.dot(r0,r0)
 res_1 = least_squares(residual_transfer_error, h0)
 
 # Printing
-np.set_printoptions(formatter={'float': '{: 0.9f}'.format})
+np.set_printoptions(formatter={'float': '{: 0.0f}'.format})
 hopt = res_1.x
 r_opt = residual_transfer_error(hopt); d_opt = np.dot(r_opt,r_opt)
 Hopt = hopt.reshape(3,3); Hopt = Hopt/Hopt[2,2]*Ha[2,2]
@@ -62,6 +69,9 @@ print('\n Hopt = \n {} \n\n Hdlt = \n {}\n\n Ha = \n {} \
       \n\n d_DLT = {} \n d_opt = {}'
       .format(Hopt/Hopt[2,2], Hdlt, Ha/Ha[2,2], d_DLT, d_opt))
 
+print('\n\n------- THIS:')
+print('xp\n{}'.format(xp))
+print('Hdlt @ x \n{}'.format(Hdlt @ x))
 
 
 

@@ -45,4 +45,4 @@ if __name__ == '__main__':
     print('\n------------ Problem 2 ------------ \nH = \n{}'.format(H))
     
     # Test to see if the homographie is correct
-    print('xp and H @ x, are equal: {}'.format(matrix_eq(xp, H @ x)))
+    print('xp and H @ x, are equal: {}'.format(matrix_eq(xp, H @ x, margin=0.000001)))
