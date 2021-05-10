@@ -95,9 +95,9 @@ def plotAxis(T, scale, ax, one_color=''):
         ax.plot([T[0,3], T[0,3]+scale*T[0,1]], [T[1,3], T[1,3]+scale*T[1,1]], [T[2,3], T[2,3]+scale*T[2,1]], color=one_color)
         ax.plot([T[0,3], T[0,3]+scale*T[0,2]], [T[1,3], T[1,3]+scale*T[1,2]], [T[2,3], T[2,3]+scale*T[2,2]], color=one_color)
     else:
-        ax.plot([T[0,3], T[0,3]+scale*T[0,0]], [T[1,3], T[1,3]+scale*T[1,0]], [T[2,3], T[2,3]+scale*T[2,0]], color='b')
-        ax.plot([T[0,3], T[0,3]+scale*T[0,1]], [T[1,3], T[1,3]+scale*T[1,1]], [T[2,3], T[2,3]+scale*T[2,1]], color='c')
-        ax.plot([T[0,3], T[0,3]+scale*T[0,2]], [T[1,3], T[1,3]+scale*T[1,2]], [T[2,3], T[2,3]+scale*T[2,2]], color='r')
+        ax.plot([T[0,3], T[0,3]+scale*T[0,0]], [T[1,3], T[1,3]+scale*T[1,0]], [T[2,3], T[2,3]+scale*T[2,0]], color='xkcd:bright purple')
+        ax.plot([T[0,3], T[0,3]+scale*T[0,1]], [T[1,3], T[1,3]+scale*T[1,1]], [T[2,3], T[2,3]+scale*T[2,1]], color='xkcd:bright green')
+        ax.plot([T[0,3], T[0,3]+scale*T[0,2]], [T[1,3], T[1,3]+scale*T[1,2]], [T[2,3], T[2,3]+scale*T[2,2]], color='xkcd:golden yellow')
 
 
 def plot(T, points, one_color='', x_min=-1.5, x_max=1.5, y_min=-1.5, y_max=1.5, z_min=-1.5, z_max=1.5, x_intervall=0.5, y_intervall=0.5, z_intervall=0.5): # 
@@ -125,13 +125,13 @@ def plot(T, points, one_color='', x_min=-1.5, x_max=1.5, y_min=-1.5, y_max=1.5, 
     ax.axes.set_zlim3d(bottom=z_min, top=z_max)
     
     ax.set_xticks(np.arange(x_min, x_max, x_intervall))
-    ax.set_yticks(np.arange(y_min, y_max, x_intervall))
-    ax.set_zticks(np.arange(z_min, z_max, x_intervall))
+    ax.set_yticks(np.arange(y_min, y_max, y_intervall))
+    ax.set_zticks(np.arange(z_min, z_max, z_intervall))
     
     if not one_color:
-        patches.append(mpatches.Patch(color='b', label='x-axis'))
-        patches.append(mpatches.Patch(color='c', label='y-axis'))
-        patches.append(mpatches.Patch(color='r', label='z-axis'))
+        patches.append(mpatches.Patch(color='xkcd:bright purple', label='x-axis'))
+        patches.append(mpatches.Patch(color='xkcd:bright green', label='y-axis'))
+        patches.append(mpatches.Patch(color='xkcd:golden yellow', label='z-axis'))
     plt.legend(handles=patches)
     
     ax.set_xlabel('X')

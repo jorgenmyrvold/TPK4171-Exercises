@@ -22,8 +22,7 @@ if __name__ == '__main__':
     b = np.array([[1,0,0], [1,1,0]]).T
     a = np.array([[0.5, 0.866, 0], [-0.25, 1.299, 0.5]]).T
     R = procrustes_book(a,b)
-    # print(R)
-    
+        
     
     # Task 1b
     b = np.array([[1,0,0.001], [0,1,0]]).T
